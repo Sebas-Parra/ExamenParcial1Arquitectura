@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.Monster" parent="Theme.Material3.Light.NoActionBar">
+        <item name="colorPrimary">@color/azul_marino</item>
+        <item name="colorOnPrimary">@color/blanco</item>
+        <item name="colorPrimaryContainer">@color/suave</item>
+        <item name="colorOnPrimaryContainer">@color/azul_marino</item>
+        <item name="colorSecondaryContainer">@color/suave</item>
+        <item name="colorOnSecondaryContainer">@color/azul_marino</item>
+        <item name="colorSurface">@color/blanco</item>
+        <item name="colorOnSurface">@color/tinta</item>
+        <item name="colorError">@color/error</item>
+        <item name="android:colorBackground">@color/fondo</item>
+        <item name="android:windowBackground">@color/fondo</item>
+    </style>
+
+    <style name="Monster.Etiqueta" parent="">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">14dp</item>
+        <item name="android:layout_marginBottom">6dp</item>
+        <item name="android:textColor">@color/gris</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="Monster.Tarjeta" parent="Widget.Material3.CardView.Outlined">
+        <item name="cardBackgroundColor">@color/blanco</item>
+        <item name="cardCornerRadius">16dp</item>
+        <item name="strokeColor">@color/borde</item>
+    </style>
+
+    <style name="Monster.TituloTarjeta" parent="">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/azul_marino</item>
+        <item name="android:textSize">17sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="Monster.Campo" parent="Widget.Material3.TextInputLayout.OutlinedBox">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">10dp</item>
+        <item name="boxCornerRadiusTopStart">10dp</item>
+        <item name="boxCornerRadiusTopEnd">10dp</item>
+        <item name="boxCornerRadiusBottomStart">10dp</item>
+        <item name="boxCornerRadiusBottomEnd">10dp</item>
+    </style>
+
+    <style name="Monster.Ayuda" parent="">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/gris</item>
+        <item name="android:textSize">13sp</item>
+    </style>
+</resources>

@@ -1,0 +1,26 @@
+# Salidas de compilacion Maven
+**/target/
+
+# Bytecode Java compilado
+*.class
+
+# Android / Gradle: caches, salidas y configuracion local
+**/.gradle/
+**/build/
+**/local.properties
+**/.idea/
+*.iml
+.kotlin/
+
+# Configuracion privada de NetBeans
+**/nbproject/private/
+
+# Archivos temporales y logs
+**/*.log
+**/*.tmp
+**/*~
+
+# Archivos del sistema operativo
+Thumbs.db
+Desktop.ini
+.DS_Store

@@ -1,0 +1,136 @@
+@startuml
+skinparam dpi 150
+skinparam shadowing false
+skinparam defaultFontName Arial
+skinparam defaultFontSize 12
+skinparam ArrowColor #1F2A6B
+skinparam ArrowFontColor #8B1A1A
+skinparam ArrowFontSize 11
+skinparam ActorBorderColor #1F2A6B
+skinparam ActorBackgroundColor #FCF8E8
+skinparam UsecaseBorderColor #1F2A6B
+skinparam UsecaseBackgroundColor #FCF8E8
+skinparam RectangleBorderColor #1F2A6B
+skinparam PackageBorderColor #1F2A6B
+skinparam ComponentBorderColor #1F2A6B
+skinparam ComponentBackgroundColor #FFF7DC
+skinparam NodeBorderColor #1F2A6B
+skinparam NodeBackgroundColor #FFFFFF
+skinparam DatabaseBorderColor #1F2A6B
+skinparam DatabaseBackgroundColor #FFF7DC
+skinparam ClassBorderColor #1F2A6B
+skinparam ClassBackgroundColor #FCF8E8
+skinparam ClassHeaderBackgroundColor #FFF7DC
+skinparam EntityBorderColor #1F2A6B
+skinparam EntityBackgroundColor #FCF8E8
+skinparam ActivityBorderColor #1F2A6B
+skinparam ActivityBackgroundColor #FCF8E8
+skinparam ActivityDiamondBorderColor #1F2A6B
+skinparam ActivityDiamondBackgroundColor #FFF7DC
+skinparam SwimlaneBorderColor #1F2A6B
+skinparam SequenceLifeLineBorderColor #1F2A6B
+skinparam ParticipantBorderColor #1F2A6B
+skinparam ParticipantBackgroundColor #FCF8E8
+skinparam SequenceGroupBorderColor #1F2A6B
+skinparam NoteBorderColor #1F2A6B
+skinparam NoteBackgroundColor #FFFFFF
+skinparam TitleFontSize 16
+title Diagrama de clases — Servidor WS_BANQUITO_JAVA_REST (módulo de crédito)
+hide empty members
+
+package "controladores" {
+  class CreditResource <<JAX-RS /credits>> {
+    +verificarSujetoCredito(cedula: String): Response
+    +obtenerMontoMaximo(codCliente: Integer): Response
+    +otorgarCredito(solicitud: CreditoRequest): Response
+    +obtenerTablaAmortizacion(codCredito: Integer): Response
+    +listarCreditos(cedula: String): Response
+  }
+  class RestResponseMapper {
+    +{static} respuesta(r: Respuesta): Response
+  }
+}
+
+package "servicios" {
+  class CreditoServices {
+    +TASA_ANUAL: BigDecimal = 16.50
+    +CUOTAS_MINIMAS: int = 3
+    +CUOTAS_MAXIMAS: int = 18
+    +EDAD_MINIMA_HOMBRES: int = 25
+    -porcentajeMontoMaximo: BigDecimal = 0.30
+    +verificarSujetoCredito(cedula: String): Respuesta
+    +obtenerMontoMaximo(codCliente: Integer): Respuesta
+    +otorgarCredito(codCliente: Integer, precio: BigDecimal, cuotas: Integer): Respuesta
+    +obtenerTablaAmortizacion(codCredito: Integer): Respuesta
+    +listarCreditos(cedula: String): Respuesta
+    +{static} calcularTablaAmortizacion(monto, cuotas, tasa): List<CuotaAmortizacion>
+    -motivoRechazo(c: Cliente): String
+    -montoMaximo(depositos, retiros): BigDecimal
+  }
+}
+
+package "datos" {
+  interface RepositorioBanquito {
+    +buscarClientePorCedula(cedula: String): Cliente
+    +buscarClientePorCodigo(cod: int): Cliente
+    +tieneDepositoDesde(cod: int, desde: LocalDate): boolean
+    +promedioMovimientos(cod: int, tipo: String, desde: LocalDate): BigDecimal
+    +tieneCreditoActivo(cod: int): boolean
+    +registrarCredito(c: Credito, tabla: List<CuotaAmortizacion>): int
+    +buscarCredito(cod: int): Credito
+    +obtenerTablaAmortizacion(cod: int): List<CuotaAmortizacion>
+    +listarCreditos(codCliente: int): List<Credito>
+  }
+  class RepositorioBanquitoJdbc
+}
+
+package "modelos" {
+  class Cliente {
+    -codCliente: int
+    -cedula: String
+    -nombre: String
+    -genero: String
+    -fechaNacimiento: LocalDate
+  }
+  class Credito {
+    -codCredito: int
+    -codCliente: int
+    -monto: BigDecimal
+    -numeroCuotas: int
+    -tasaAnual: BigDecimal
+    -valorCuota: BigDecimal
+    -fecha: String
+    -estado: String
+  }
+  class CuotaAmortizacion {
+    -numeroCuota: int
+    -valorCuota: BigDecimal
+    -interesPagado: BigDecimal
+    -capitalPagado: BigDecimal
+    -saldo: BigDecimal
+  }
+  class CreditoRequest {
+    -codCliente: Integer
+    -precio: BigDecimal
+    -numeroCuotas: Integer
+  }
+  class Respuesta {
+    -estado: String
+    -codigo: String
+    -mensaje: String
+    -sujetoCredito: Boolean
+    -motivo: String
+    -montoMaximo: BigDecimal
+  }
+}
+
+CreditResource --> CreditoServices
+CreditResource ..> RestResponseMapper
+CreditResource ..> CreditoRequest
+CreditoServices --> RepositorioBanquito
+RepositorioBanquitoJdbc ..|> RepositorioBanquito
+Credito "1" *-- "3..18" CuotaAmortizacion
+Cliente "1" -- "0..*" Credito
+CreditoServices ..> Respuesta
+Respuesta --> CuotaAmortizacion
+@enduml

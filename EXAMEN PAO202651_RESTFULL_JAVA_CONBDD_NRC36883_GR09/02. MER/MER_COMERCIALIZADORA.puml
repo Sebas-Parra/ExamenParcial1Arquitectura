@@ -1,0 +1,84 @@
+@startuml
+skinparam dpi 150
+skinparam shadowing false
+skinparam defaultFontName Arial
+skinparam defaultFontSize 12
+skinparam ArrowColor #1F2A6B
+skinparam ArrowFontColor #8B1A1A
+skinparam ArrowFontSize 11
+skinparam ActorBorderColor #1F2A6B
+skinparam ActorBackgroundColor #FCF8E8
+skinparam UsecaseBorderColor #1F2A6B
+skinparam UsecaseBackgroundColor #FCF8E8
+skinparam RectangleBorderColor #1F2A6B
+skinparam PackageBorderColor #1F2A6B
+skinparam ComponentBorderColor #1F2A6B
+skinparam ComponentBackgroundColor #FFF7DC
+skinparam NodeBorderColor #1F2A6B
+skinparam NodeBackgroundColor #FFFFFF
+skinparam DatabaseBorderColor #1F2A6B
+skinparam DatabaseBackgroundColor #FFF7DC
+skinparam ClassBorderColor #1F2A6B
+skinparam ClassBackgroundColor #FCF8E8
+skinparam ClassHeaderBackgroundColor #FFF7DC
+skinparam EntityBorderColor #1F2A6B
+skinparam EntityBackgroundColor #FCF8E8
+skinparam ActivityBorderColor #1F2A6B
+skinparam ActivityBackgroundColor #FCF8E8
+skinparam ActivityDiamondBorderColor #1F2A6B
+skinparam ActivityDiamondBackgroundColor #FFF7DC
+skinparam SwimlaneBorderColor #1F2A6B
+skinparam SequenceLifeLineBorderColor #1F2A6B
+skinparam ParticipantBorderColor #1F2A6B
+skinparam ParticipantBackgroundColor #FCF8E8
+skinparam SequenceGroupBorderColor #1F2A6B
+skinparam NoteBorderColor #1F2A6B
+skinparam NoteBackgroundColor #FFFFFF
+skinparam TitleFontSize 16
+title Modelo entidad-relación — Comercializadora de Teléfonos Celulares
+hide circle
+skinparam linetype ortho
+
+entity "CELULAR" as CELULAR {
+  * COD_CELULAR : INT <<PK>>
+  --
+  * MARCA : VARCHAR(50)
+  * MODELO : VARCHAR(100)
+  DESCRIPCION : VARCHAR(255)
+  * PRECIO : NUMERIC(10,2)  > 0
+  * DISPONIBLE : TINYINT(1)
+}
+
+entity "COMPRADOR" as COMPRADOR {
+  * CEDULA : VARCHAR(10) <<PK>>
+  --
+  * NOMBRE : VARCHAR(100)
+}
+
+entity "FACTURA" as FACTURA {
+  * COD_FACTURA : INT <<PK>>
+  --
+  * CEDULA : VARCHAR(10) <<FK>>
+  * FECHA : DATETIME
+  * FORMA_PAGO : VARCHAR(10)  EFECTIVO | CREDITO
+  * SUBTOTAL : NUMERIC(10,2)
+  * DESCUENTO : NUMERIC(10,2)
+  * TOTAL : NUMERIC(10,2)
+  COD_CREDITO : INT  (crédito BanQuito)
+  NUMERO_CUOTAS : INT  3..18
+  VALOR_CUOTA : NUMERIC(10,2)
+}
+
+entity "DETALLE_FACTURA" as DETALLE {
+  * COD_FACTURA : INT <<PK, FK>>
+  * COD_CELULAR : INT <<PK, FK>>
+  --
+  * CANTIDAD : INT  > 0
+  * PRECIO_UNITARIO : NUMERIC(10,2)
+  * SUBTOTAL : NUMERIC(10,2)
+}
+
+COMPRADOR ||--o{ FACTURA : realiza
+FACTURA ||--|{ DETALLE : contiene
+CELULAR ||--o{ DETALLE : se vende en
+@enduml

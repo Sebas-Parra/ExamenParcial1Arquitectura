@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Misma paleta que EstilosUI del cliente de escritorio. -->
+<resources>
+    <color name="fondo">#F1F4F8</color>
+    <color name="tinta">#1D2939</color>
+    <color name="azul_marino">#183257</color>
+    <color name="azul_hover">#234470</color>
+    <color name="suave">#E8EDF4</color>
+    <color name="gris">#5B697A</color>
+    <color name="borde">#D3DBE5</color>
+    <color name="blanco">#FCFDFE</color>
+    <color name="error">#B42318</color>
+</resources>

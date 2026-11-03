@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Comercializadora</string>
+    <string name="marca">MONSTER</string>
+    <string name="servidor">Servidor</string>
+    <string name="servidor_mensaje">URL base del API de la comercializadora (termina en /api).</string>
+    <string name="guardar">Guardar</string>
+    <string name="cancelar">Cancelar</string>
+    <string name="aceptar">Aceptar</string>
+    <string name="cerrar">Cerrar</string>
+
+    <string name="seccion_catalogo">Catálogo</string>
+    <string name="seccion_facturar">Facturar</string>
+    <string name="seccion_facturas">Facturas</string>
+    <string name="seccion_amortizacion">Amortización</string>
+    <string name="titulo_catalogo">Catálogo de celulares</string>
+    <string name="titulo_facturar">Facturar venta</string>
+    <string name="titulo_facturas">Facturas</string>
+    <string name="titulo_amortizacion">Tabla de amortización</string>
+
+    <string name="nuevo_celular">Nuevo celular</string>
+    <string name="editar_celular">Editar celular</string>
+    <string name="mostrar_retirados">Mostrar retirados</string>
+    <string name="marca_celular">Marca</string>
+    <string name="modelo">Modelo</string>
+    <string name="descripcion">Descripción (opcional)</string>
+    <string name="precio">Precio (USD)</string>
+    <string name="disponible">Disponible para la venta</string>
+    <string name="editar">Editar</string>
+    <string name="retirar">Retirar</string>
+    <string name="sin_celulares">No hay celulares en el catálogo.</string>
+
+    <string name="celulares_vender">1. Celulares a vender</string>
+    <string name="cantidad">Cantidad</string>
+    <string name="agregar">Agregar</string>
+    <string name="quitar">Quitar</string>
+    <string name="vaciar">Vaciar carrito</string>
+    <string name="carrito_vacio">El carrito está vacío. Agrega los celulares que se van a vender.</string>
+    <string name="subtotal">Subtotal</string>
+    <string name="descuento">Descuento</string>
+    <string name="total">TOTAL</string>
+    <string name="pago_comprador">2. Pago y comprador</string>
+    <string name="efectivo">Efectivo (42% de descuento)</string>
+    <string name="credito">Crédito directo BanQuito</string>
+    <string name="cedula_comprador">Cédula del comprador</string>
+    <string name="nombre_comprador">Nombre del comprador</string>
+    <string name="cuotas">Número de cuotas mensuales (3 a 18)</string>
+    <string name="nota_efectivo">Se aplica el 42% de descuento sobre el subtotal.</string>
+    <string name="nota_credito">El banco verifica si el comprador es sujeto de crédito y su monto máximo. El nombre se toma del banco.</string>
+    <string name="facturar">Facturar</string>
+
+    <string name="cedula_filtro">Cédula (vacío para todas)</string>
+    <string name="buscar">Buscar</string>
+    <string name="sin_facturas">No hay facturas registradas.</string>
+
+    <string name="cedula_cliente">Cédula del cliente</string>
+    <string name="sin_creditos">El cliente no tiene créditos en el Banco BanQuito.</string>
+    <string name="elegir_credito">Toca un crédito para ver su tabla de amortización.</string>
+    <string name="tabla_amortizacion">Tabla de amortización</string>
+</resources>

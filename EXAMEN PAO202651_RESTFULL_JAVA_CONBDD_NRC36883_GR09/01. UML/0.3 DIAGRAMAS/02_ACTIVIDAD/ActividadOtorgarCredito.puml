@@ -1,0 +1,70 @@
+@startuml
+skinparam dpi 150
+skinparam shadowing false
+skinparam defaultFontName Arial
+skinparam defaultFontSize 12
+skinparam ArrowColor #1F2A6B
+skinparam ArrowFontColor #8B1A1A
+skinparam ArrowFontSize 11
+skinparam ActorBorderColor #1F2A6B
+skinparam ActorBackgroundColor #FCF8E8
+skinparam UsecaseBorderColor #1F2A6B
+skinparam UsecaseBackgroundColor #FCF8E8
+skinparam RectangleBorderColor #1F2A6B
+skinparam PackageBorderColor #1F2A6B
+skinparam ComponentBorderColor #1F2A6B
+skinparam ComponentBackgroundColor #FFF7DC
+skinparam NodeBorderColor #1F2A6B
+skinparam NodeBackgroundColor #FFFFFF
+skinparam DatabaseBorderColor #1F2A6B
+skinparam DatabaseBackgroundColor #FFF7DC
+skinparam ClassBorderColor #1F2A6B
+skinparam ClassBackgroundColor #FCF8E8
+skinparam ClassHeaderBackgroundColor #FFF7DC
+skinparam EntityBorderColor #1F2A6B
+skinparam EntityBackgroundColor #FCF8E8
+skinparam ActivityBorderColor #1F2A6B
+skinparam ActivityBackgroundColor #FCF8E8
+skinparam ActivityDiamondBorderColor #1F2A6B
+skinparam ActivityDiamondBackgroundColor #FFF7DC
+skinparam SwimlaneBorderColor #1F2A6B
+skinparam SequenceLifeLineBorderColor #1F2A6B
+skinparam ParticipantBorderColor #1F2A6B
+skinparam ParticipantBackgroundColor #FCF8E8
+skinparam SequenceGroupBorderColor #1F2A6B
+skinparam NoteBorderColor #1F2A6B
+skinparam NoteBackgroundColor #FFFFFF
+skinparam TitleFontSize 16
+title Actividad — Otorgar crédito y crear la tabla de amortización (CU-08)
+start
+:Recibir POST /credits\n{codCliente, precio, numeroCuotas};
+if (¿Datos completos, precio > 0\ny 3 <= cuotas <= 18?) then (no)
+  :ERROR DATA-001;
+  stop
+endif
+if (¿Existe el cliente?) then (no)
+  :ERROR CLI-001;
+  stop
+endif
+if (¿Es sujeto de crédito? (CU-01)) then (no)
+  :ERROR CRED-001 con el motivo (CU-11);
+  stop
+endif
+:Promedio depósitos y retiros de los últimos 3 meses;
+:Monto máximo = ((Prom. depósitos − Prom. retiros) × 30%) × 6;
+if (¿Precio <= monto máximo?) then (no)
+  :ERROR CRED-002 con el monto máximo (CU-11);
+  stop
+endif
+:Tasa periodo = 16.5% / 12;
+:Cuota = precio × tasa / (1 − (1 + tasa)^−n);
+repeat
+  :Interés = saldo × tasa;
+  :Capital = cuota − interés;
+  :Saldo = saldo − capital;
+repeat while (¿Quedan cuotas?) is (sí)
+-> no;
+:Guardar CREDITO (ACTIVO) y TABLA_AMORTIZACION\nen una sola transacción;
+:Responder OK con codCredito, valor de la cuota y tabla;
+stop
+@enduml

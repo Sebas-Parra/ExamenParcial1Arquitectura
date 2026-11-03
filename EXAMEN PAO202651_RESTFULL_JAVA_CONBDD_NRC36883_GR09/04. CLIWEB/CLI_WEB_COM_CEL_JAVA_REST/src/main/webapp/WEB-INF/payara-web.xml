@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE payara-web-app PUBLIC "-//Payara.fish//DTD Payara Server 7 Servlet 6.0//EN" "https://payara.fish/dtds/payara-web-app_6_0-1.dtd">
+<payara-web-app>
+    <jsp-config>
+        <property name="compilerSourceVM" value="21" />
+        <property name="compilerTargetVM" value="21" />
+    </jsp-config>
+</payara-web-app>

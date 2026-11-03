@@ -1,0 +1,39 @@
+<%@ page import="java.math.BigDecimal,ec.edu.monster.vista.VistaHtml" %><%!
+private String esc(Object valor) { return VistaHtml.escapar(valor); }
+private String dinero(BigDecimal valor) { return VistaHtml.dinero(valor); }
+private String activo(Object seccion, String clave) { return clave.equals(seccion) ? " class=\"activo\" aria-current=\"page\"" : ""; }
+%><%
+String ctx = request.getContextPath();
+String csrf = esc(session.getAttribute("csrf"));
+Object seccionActual = request.getAttribute("seccion");
+%><!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title><%=esc(titulo)%> · Comercializadora de celulares</title>
+  <link rel="stylesheet" href="<%=ctx%>/recursos/css/estilos.css">
+</head>
+<body>
+<div class="app">
+  <nav class="menu" aria-label="Secciones">
+    <div class="marca">
+      <strong>MONSTER</strong>
+      <span>Comercializadora de celulares</span>
+    </div>
+    <a href="<%=ctx%>/catalogo"<%=activo(seccionActual, "catalogo")%>>Catálogo</a>
+    <a href="<%=ctx%>/facturar"<%=activo(seccionActual, "facturar")%>>Facturar venta</a>
+    <a href="<%=ctx%>/facturas"<%=activo(seccionActual, "facturas")%>>Facturas</a>
+    <a href="<%=ctx%>/amortizacion"<%=activo(seccionActual, "amortizacion")%>>Tabla de amortización</a>
+    <p class="aliado">Crédito directo<br>Banco BanQuito · 16.5% anual</p>
+  </nav>
+  <main class="contenido">
+    <p class="eyebrow">MONSTER / SERVICIO REST</p>
+    <h1><%=esc(titulo)%></h1>
+    <p class="muted"><%=esc(subtitulo)%></p>
+    <% if (request.getAttribute("aviso") != null) { %>
+      <div class="notice success" role="status"><%=esc(request.getAttribute("aviso"))%></div>
+    <% } %>
+    <% if (request.getAttribute("error") != null) { %>
+      <div class="notice error" role="alert"><%=esc(request.getAttribute("error"))%></div>
+    <% } %>

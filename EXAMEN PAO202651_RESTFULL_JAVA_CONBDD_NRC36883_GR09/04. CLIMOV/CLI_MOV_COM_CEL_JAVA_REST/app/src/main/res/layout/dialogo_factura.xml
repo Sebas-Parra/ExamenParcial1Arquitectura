@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingStart="20dp"
+        android:paddingTop="4dp"
+        android:paddingEnd="20dp"
+        android:paddingBottom="8dp">
+
+        <TextView
+            android:id="@+id/aviso"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:textColor="#17633E"
+            android:textStyle="bold"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/cliente"
+            style="@style/Monster.Ayuda"
+            android:textSize="14sp" />
+
+        <LinearLayout
+            android:id="@+id/detalles"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="vertical" />
+
+        <TableLayout
+            android:id="@+id/totales"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:stretchColumns="0" />
+
+        <TextView
+            android:id="@+id/tituloTabla"
+            style="@style/Monster.TituloTarjeta"
+            android:layout_marginTop="18dp"
+            android:text="@string/tabla_amortizacion"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/resumenTabla"
+            style="@style/Monster.Ayuda"
+            android:layout_marginTop="2dp"
+            android:layout_marginBottom="8dp"
+            android:visibility="gone" />
+
+        <TableLayout
+            android:id="@+id/tabla"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:stretchColumns="*" />
+    </LinearLayout>
+</ScrollView>

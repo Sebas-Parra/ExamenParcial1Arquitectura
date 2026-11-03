@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/navCatalogo" android:icon="@drawable/ic_celular" android:title="@string/seccion_catalogo" />
+    <item android:id="@+id/navFacturar" android:icon="@drawable/ic_carrito" android:title="@string/seccion_facturar" />
+    <item android:id="@+id/navFacturas" android:icon="@drawable/ic_facturas" android:title="@string/seccion_facturas" />
+    <item android:id="@+id/navAmortizacion" android:icon="@drawable/ic_tabla" android:title="@string/seccion_amortizacion" />
+</menu>

@@ -1,0 +1,17 @@
+<%-- Tabla de amortización con el formato del enunciado (empieza en la fila 0 con el saldo inicial); requiere las variables "tabla" y "montoCredito" (monto del crédito, puede ser null). --%>
+<div class="tabla-contenedor">
+  <table>
+    <thead><tr><th class="num"># Cuota</th><th class="num">Valor Cuota</th><th class="num">Interés Pagado</th><th class="num">Capital Pagado</th><th class="num">Saldo</th></tr></thead>
+    <tbody>
+    <% for (ec.edu.monster.modelo.CuotaAmortizacion c : ec.edu.monster.modelo.CuotaAmortizacion.conFilaInicial(tabla, montoCredito)) { %>
+      <tr>
+        <td class="num"><%=c.getNumeroCuota()%></td>
+        <td class="num"><%=c.getValorCuota() == null ? "" : dinero(c.getValorCuota())%></td>
+        <td class="num"><%=c.getInteresPagado() == null ? "" : dinero(c.getInteresPagado())%></td>
+        <td class="num"><%=c.getCapitalPagado() == null ? "" : dinero(c.getCapitalPagado())%></td>
+        <td class="num"><%=dinero(c.getSaldo())%></td>
+      </tr>
+    <% } %>
+    </tbody>
+  </table>
+</div>

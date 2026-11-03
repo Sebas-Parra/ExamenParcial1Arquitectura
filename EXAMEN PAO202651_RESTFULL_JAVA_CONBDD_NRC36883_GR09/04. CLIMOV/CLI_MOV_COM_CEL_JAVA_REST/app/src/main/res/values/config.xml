@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--
+        URL base del API REST de la comercializadora en Payara (termina en /api).
+        Emulador: 10.0.2.2 apunta al localhost del computador.
+        Celular físico: reemplazar 10.0.2.2 por la IP del computador (ipconfig) o usar la URL de ngrok.
+        También se puede cambiar desde la app con el botón Servidor de la cabecera.
+    -->
+    <string name="endpoint_rest" translatable="false">http://10.0.2.2:8080/WS_COM_CEL_JAVA_REST/api</string>
+</resources>

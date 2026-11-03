@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <title>Core BanQuito - Módulo de crédito</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+    </head>
+    <body>
+        <main>
+            <h1>Core BanQuito - Módulo de crédito</h1>
+            <p>API Jakarta RESTful Web Services (JAX-RS) que consume la Comercializadora de Teléfonos Celulares.</p>
+            <p>La raíz de la API es <code>/api</code>. Todas las operaciones envían y reciben JSON.</p>
+            <ul>
+                <li><code>GET /api/credits/eligibility/{cedula}</code>: verificar si una persona es sujeto de crédito.</li>
+                <li><code>GET /api/credits/max-amount/{codCliente}</code>: obtener el monto máximo de crédito.</li>
+                <li><code>POST /api/credits</code>: otorgar el crédito y crear la tabla de amortización.</li>
+                <li><code>GET /api/credits/{codCredito}/amortization</code>: consultar la tabla de amortización.</li>
+                <li><code>GET /api/credits?cedula={cedula}</code>: listar los créditos de un cliente.</li>
+            </ul>
+            <p>Consulta <code>README.md</code> en el proyecto para ver ejemplos JSON, configuración y códigos de respuesta.</p>
+        </main>
+    </body>
+</html>
