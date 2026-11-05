@@ -10,7 +10,7 @@ import java.net.URI;
 
 /** Punto de entrada del cliente de consola de la Comercializadora de Teléfonos Celulares. */
 public final class CLI_CON_COM_CEL_JAVA_REST {
-    private static final String ENDPOINT_PREDETERMINADO = "http://localhost:8080/WS_COM_CEL_JAVA_REST/api";
+    private static final String ENDPOINT_PREDETERMINADO = "https://recycled-facedown-traction.ngrok-free.dev/WS_COM_CEL_JAVA_REST/api";
 
     private CLI_CON_COM_CEL_JAVA_REST() {
     }
