@@ -1,0 +1,23 @@
+services:
+  db:
+    image: mariadb:11.4
+    container_name: monster-mariadb
+    restart: unless-stopped
+    environment:
+      MARIADB_ROOT_PASSWORD: ${MARIADB_ROOT_PASSWORD:-monster_local}
+      TZ: America/Guayaquil
+    ports:
+      - "3306:3306"
+    volumes:
+      - monster_mariadb_data:/var/lib/mysql
+      - "./03. BDD/COMERCIALIZADORA.sql:/docker-entrypoint-initdb.d/01-comercializadora.sql:ro"
+      - "./03. BDD/BANQUITO.sql:/docker-entrypoint-initdb.d/02-banquito.sql:ro"
+      - "./03. BDD/DOCKER-USUARIOS.sql:/docker-entrypoint-initdb.d/03-usuarios-docker.sql:ro"
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+volumes:
+  monster_mariadb_data:

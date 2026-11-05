@@ -24,7 +24,7 @@ Para otro contexto o servidor, cambia ese parámetro o define la propiedad JVM `
 
 Un menú lateral (o superior en pantallas angostas) da acceso a cuatro páginas:
 
-- **Catálogo** (`/catalogo`): lista de celulares con formulario para registrar y editar; *Retirar* lo quita de la venta sin borrar sus facturas y *Mostrar retirados* permite volver a ofrecerlo desde Editar.
+- **Catálogo** (`/catalogo`): tabla de ancho completo con botones para registrar y actualizar la lista. El alta y la edición se realizan en un modal; *Retirar* pide confirmación en un modal y quita el celular de la venta sin borrar sus facturas. *Mostrar retirados* permite volver a ofrecerlo desde Editar.
 - **Facturar venta** (`/facturar`): carrito guardado en la sesión, forma de pago (efectivo con 42% de descuento o crédito directo de 3 a 18 cuotas) y datos del comprador. Los totales de cada forma de pago se calculan antes de enviar. Si la factura se registra se abre su detalle; si el banco la rechaza se muestra el motivo o el monto máximo aprobado.
 - **Facturas** (`/facturas`): todas o por cédula; *Ver detalle* muestra la factura y, si es a crédito, su tabla de amortización consultada en el banco.
 - **Tabla de amortización** (`/amortizacion`): se ingresa la cédula, se listan los créditos del cliente y al elegir uno se muestra su tabla (# Cuota, Valor Cuota, Interés Pagado, Capital Pagado, Saldo).
