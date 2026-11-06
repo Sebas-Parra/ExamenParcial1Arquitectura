@@ -70,7 +70,7 @@ h2 { margin: 0 0 14px; color: var(--color-azul-marino); font-size: 1.1rem; }
 .columnas > .panel { margin-top: 0; }
 .barra { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
 .factura-acciones { display: flex; align-items: center; gap: 16px; }
-.factura-acciones button { margin-top: 0; }
+.factura-acciones .boton { margin-top: 0; }
 .barra--catalogo { align-items: center; margin-bottom: 14px; }
 .barra--catalogo h2 { margin: 0; }
 .acciones-catalogo { display: flex; align-items: center; justify-content: flex-end; gap: 14px; flex-wrap: wrap; }
@@ -234,17 +234,3 @@ tr.seleccionada td { background: #d6e2f2 !important; }
   .resumen { width: 100%; }
 }
 
-@media print {
-  @page { margin: 16mm; }
-  body { min-height: 0; background: #fff; color: #111; }
-  .app { display: block; min-height: 0; }
-  .menu, .eyebrow, .solo-pantalla { display: none !important; }
-  .contenido { padding: 0; }
-  h1 { margin-top: 0; color: #111; font-size: 24pt; }
-  .muted { color: #444; }
-  .panel { margin-top: 18pt; padding: 14pt; border: 1px solid #bbb; border-radius: 0; box-shadow: none; }
-  .tabla-contenedor { overflow: visible; border-radius: 0; }
-  th { background: #eee; color: #111; }
-  tbody tr:nth-child(even) td { background: #f7f7f7; }
-  .resumen { background: #fff; }
-}
