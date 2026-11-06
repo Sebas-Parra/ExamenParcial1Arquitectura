@@ -2,6 +2,7 @@ package ec.edu.monster.vista;
 
 import ec.edu.monster.modelo.DetalleFactura;
 import ec.edu.monster.modelo.Factura;
+import ec.edu.monster.modelo.CuotaAmortizacion;
 import java.awt.Color;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -34,12 +35,16 @@ public final class GeneradorPdfFactura {
     private GeneradorPdfFactura() { }
 
     public static byte[] generar(Factura factura) throws IOException {
+        return generar(factura, List.of());
+    }
+
+    public static byte[] generar(Factura factura, List<CuotaAmortizacion> tabla) throws IOException {
         if (factura == null || factura.getCodFactura() == null) {
             throw new IllegalArgumentException("La factura no contiene un número válido.");
         }
         try (PDDocument documento = new PDDocument(); ByteArrayOutputStream salida = new ByteArrayOutputStream()) {
             documento.getDocumentInformation().setTitle("Factura N.° " + factura.getCodFactura());
-            Pagina pagina = nuevaPagina(documento, factura, false);
+            Pagina pagina = nuevaPagina(documento, factura, null);
             pagina.y = dibujarEncabezadoTabla(pagina.stream, pagina.y);
 
             int indice = 0;
@@ -48,7 +53,7 @@ public final class GeneradorPdfFactura {
                 float altoFila = Math.max(30, producto.size() * 12 + 14);
                 if (pagina.y - altoFila < 120) {
                     cerrarPagina(pagina);
-                    pagina = nuevaPagina(documento, factura, true);
+                    pagina = nuevaPagina(documento, factura, "Detalle de factura · continuación");
                     pagina.y = dibujarEncabezadoTabla(pagina.stream, pagina.y);
                     indice = 0;
                 }
@@ -58,16 +63,20 @@ public final class GeneradorPdfFactura {
 
             if (pagina.y < 245) {
                 cerrarPagina(pagina);
-                pagina = nuevaPagina(documento, factura, true);
+                pagina = nuevaPagina(documento, factura, "Resumen de factura · N.° " + factura.getCodFactura());
             }
             dibujarTotales(pagina.stream, factura, pagina.y);
             cerrarPagina(pagina);
+
+            if (factura.getCodCredito() != null && tabla != null && !tabla.isEmpty()) {
+                dibujarTablaAmortizacion(documento, factura, CuotaAmortizacion.conFilaInicial(tabla, factura.getTotal()));
+            }
             documento.save(salida);
             return salida.toByteArray();
         }
     }
 
-    private static Pagina nuevaPagina(PDDocument documento, Factura factura, boolean continuacion) throws IOException {
+    private static Pagina nuevaPagina(PDDocument documento, Factura factura, String subtitulo) throws IOException {
         PDPage hoja = new PDPage(PDRectangle.A4);
         documento.addPage(hoja);
         PDPageContentStream stream = new PDPageContentStream(documento, hoja);
@@ -77,16 +86,16 @@ public final class GeneradorPdfFactura {
         stream.fill();
         texto(stream, "MONSTER", MARGEN, ALTO - 43, NEGRITA, 17, Color.WHITE);
         texto(stream, "Comercializadora de celulares", MARGEN, ALTO - 64, NORMAL, 9, new Color(218, 227, 239));
-        texto(stream, continuacion ? "FACTURA · CONTINUACIÓN" : "FACTURA", ANCHO - MARGEN - 188, ALTO - 40,
+        texto(stream, "FACTURA", ANCHO - MARGEN - 188, ALTO - 40,
                 NEGRITA, 10, new Color(218, 227, 239));
         texto(stream, "N.° " + factura.getCodFactura(), ANCHO - MARGEN - 188, ALTO - 65,
                 NEGRITA, 20, Color.WHITE);
 
         float y = ALTO - 121;
-        if (!continuacion) {
+        if (subtitulo == null) {
             y = dibujarDatosCliente(stream, factura, y);
         } else {
-            texto(stream, "Detalle de productos · Factura N.° " + factura.getCodFactura(), MARGEN, y,
+            texto(stream, subtitulo, MARGEN, y,
                     NEGRITA, 11, AZUL);
             y -= 22;
         }
@@ -171,6 +180,56 @@ public final class GeneradorPdfFactura {
         }
     }
 
+    private static void dibujarTablaAmortizacion(PDDocument documento, Factura factura,
+            List<CuotaAmortizacion> cuotas) throws IOException {
+        Pagina pagina = nuevaPagina(documento, factura,
+                "Tabla de amortización · Crédito N.° " + factura.getCodCredito());
+        pagina.y = dibujarEncabezadoAmortizacion(pagina.stream, pagina.y);
+        for (CuotaAmortizacion cuota : cuotas) {
+            float alto = 27;
+            if (pagina.y - alto < 60) {
+                cerrarPagina(pagina);
+                pagina = nuevaPagina(documento, factura, "Tabla de amortización · continuación");
+                pagina.y = dibujarEncabezadoAmortizacion(pagina.stream, pagina.y);
+            }
+            dibujarFilaAmortizacion(pagina.stream, pagina.y, alto, cuota, cuota.getNumeroCuota());
+            pagina.y -= alto;
+        }
+        cerrarPagina(pagina);
+    }
+
+    private static float dibujarEncabezadoAmortizacion(PDPageContentStream stream, float y) throws IOException {
+        float alto = 30;
+        stream.setNonStrokingColor(AZUL);
+        stream.addRect(MARGEN, y - alto, ANCHO_CONTENIDO, alto);
+        stream.fill();
+        texto(stream, "# CUOTA", MARGEN + 8, y - 20, NEGRITA, 8, Color.WHITE);
+        texto(stream, "VALOR CUOTA", MARGEN + 64, y - 20, NEGRITA, 8, Color.WHITE);
+        texto(stream, "INTERÉS PAGADO", MARGEN + 158, y - 20, NEGRITA, 8, Color.WHITE);
+        texto(stream, "CAPITAL PAGADO", MARGEN + 269, y - 20, NEGRITA, 8, Color.WHITE);
+        texto(stream, "SALDO", MARGEN + 424, y - 20, NEGRITA, 8, Color.WHITE);
+        return y - alto;
+    }
+
+    private static void dibujarFilaAmortizacion(PDPageContentStream stream, float y, float alto,
+            CuotaAmortizacion cuota, int indice) throws IOException {
+        float base = y - alto;
+        stream.setNonStrokingColor(indice % 2 == 0 ? Color.WHITE : FILA);
+        stream.addRect(MARGEN, base, ANCHO_CONTENIDO, alto);
+        stream.fill();
+        stream.setStrokingColor(BORDE);
+        stream.moveTo(MARGEN, base);
+        stream.lineTo(MARGEN + ANCHO_CONTENIDO, base);
+        stream.stroke();
+
+        float textoY = y - 18;
+        alinearDerecha(stream, String.valueOf(cuota.getNumeroCuota()), MARGEN + 55, textoY, NORMAL, 9, AZUL);
+        alinearDerecha(stream, dineroOpcional(cuota.getValorCuota()), MARGEN + 150, textoY, NORMAL, 9, AZUL);
+        alinearDerecha(stream, dineroOpcional(cuota.getInteresPagado()), MARGEN + 257, textoY, NORMAL, 9, AZUL);
+        alinearDerecha(stream, dineroOpcional(cuota.getCapitalPagado()), MARGEN + 364, textoY, NORMAL, 9, AZUL);
+        alinearDerecha(stream, dineroOpcional(cuota.getSaldo()), MARGEN + ANCHO_CONTENIDO - 8, textoY, NORMAL, 9, AZUL);
+    }
+
     private static void cerrarPagina(Pagina pagina) throws IOException {
         pagina.stream.setStrokingColor(BORDE);
         pagina.stream.moveTo(MARGEN, 34);
@@ -236,6 +295,10 @@ public final class GeneradorPdfFactura {
 
     private static String dinero(BigDecimal valor) {
         return valor == null ? "$0.00" : String.format(Locale.US, "$%,.2f", valor);
+    }
+
+    private static String dineroOpcional(BigDecimal valor) {
+        return valor == null ? "" : dinero(valor);
     }
 
     private static String texto(String valor) {

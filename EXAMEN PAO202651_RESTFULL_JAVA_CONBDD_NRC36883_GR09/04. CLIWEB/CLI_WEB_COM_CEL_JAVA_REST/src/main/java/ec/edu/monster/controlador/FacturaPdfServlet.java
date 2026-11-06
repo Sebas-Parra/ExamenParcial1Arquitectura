@@ -1,6 +1,7 @@
 package ec.edu.monster.controlador;
 
 import ec.edu.monster.modelo.Factura;
+import ec.edu.monster.modelo.CuotaAmortizacion;
 import ec.edu.monster.modelo.RespuestaRest;
 import ec.edu.monster.vista.GeneradorPdfFactura;
 import jakarta.servlet.ServletException;
@@ -8,6 +9,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
 
 /** Descarga una factura real como PDF, sin depender del diálogo de impresión del navegador. */
 @WebServlet("/facturas/pdf")
@@ -30,7 +32,18 @@ public class FacturaPdfServlet extends ControladorBase {
         }
 
         Factura factura = resultado.getFactura();
-        byte[] pdf = GeneradorPdfFactura.generar(factura);
+        List<CuotaAmortizacion> tabla = List.of();
+        if (factura.getCodCredito() != null) {
+            RespuestaRest amortizacion = api().obtenerTablaAmortizacion(factura.getCodCredito());
+            if (!amortizacion.isExito()) {
+                response.sendError(HttpServletResponse.SC_BAD_GATEWAY,
+                        "No se pudo consultar la tabla de amortización: " + mensaje(amortizacion));
+                return;
+            }
+            tabla = amortizacion.getTablaAmortizacion();
+        }
+
+        byte[] pdf = GeneradorPdfFactura.generar(factura, tabla);
         response.setContentType("application/pdf");
         response.setHeader("Content-Disposition", "attachment; filename=\"factura-" + id + ".pdf\"");
         response.setHeader("Cache-Control", "no-store");

@@ -85,7 +85,7 @@ public final class DialogoFactura extends JDialog {
         botones.setOpaque(false);
         JButton guardarPdf = new JButton("Descargar PDF");
         EstilosUI.estilizarBotonSecundario(guardarPdf);
-        guardarPdf.addActionListener(e -> guardarPdf(f));
+        guardarPdf.addActionListener(e -> guardarPdf(f, tabla));
         botones.add(guardarPdf);
         JButton cerrar = new JButton("Cerrar");
         EstilosUI.estilizarBotonPrincipal(cerrar);
@@ -99,7 +99,7 @@ public final class DialogoFactura extends JDialog {
         setLocationRelativeTo(padre);
     }
 
-    private void guardarPdf(Factura factura) {
+    private void guardarPdf(Factura factura, List<CuotaAmortizacion> tabla) {
         JFileChooser selector = new JFileChooser();
         selector.setDialogTitle("Guardar factura como PDF");
         selector.setFileFilter(new FileNameExtensionFilter("Archivo PDF (*.pdf)", "pdf"));
@@ -115,7 +115,7 @@ public final class DialogoFactura extends JDialog {
                 JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) != JOptionPane.YES_OPTION) return;
 
         try {
-            Files.write(archivo.toPath(), GeneradorPdfFactura.generar(factura));
+            Files.write(archivo.toPath(), GeneradorPdfFactura.generar(factura, tabla));
             JOptionPane.showMessageDialog(this, "Factura guardada en:\n" + archivo.getAbsolutePath(),
                     "PDF guardado", JOptionPane.INFORMATION_MESSAGE);
         } catch (IOException | IllegalArgumentException ex) {
