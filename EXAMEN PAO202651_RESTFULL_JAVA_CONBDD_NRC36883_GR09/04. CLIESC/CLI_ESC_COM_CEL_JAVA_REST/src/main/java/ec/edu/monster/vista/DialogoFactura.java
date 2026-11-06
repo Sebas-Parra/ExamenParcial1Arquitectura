@@ -3,6 +3,9 @@ package ec.edu.monster.vista;
 import ec.edu.monster.modelo.CuotaAmortizacion;
 import ec.edu.monster.modelo.DetalleFactura;
 import ec.edu.monster.modelo.Factura;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -14,9 +17,12 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JFileChooser;
 import javax.swing.JPanel;
+import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.SwingConstants;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 /** Muestra una factura con su detalle y, si es a crédito, la tabla de amortización. */
 public final class DialogoFactura extends JDialog {
@@ -77,6 +83,10 @@ public final class DialogoFactura extends JDialog {
 
         JPanel botones = new JPanel(new FlowLayout(FlowLayout.RIGHT, 0, 0));
         botones.setOpaque(false);
+        JButton guardarPdf = new JButton("Descargar PDF");
+        EstilosUI.estilizarBotonSecundario(guardarPdf);
+        guardarPdf.addActionListener(e -> guardarPdf(f));
+        botones.add(guardarPdf);
         JButton cerrar = new JButton("Cerrar");
         EstilosUI.estilizarBotonPrincipal(cerrar);
         cerrar.addActionListener(e -> dispose());
@@ -87,6 +97,31 @@ public final class DialogoFactura extends JDialog {
         getRootPane().setDefaultButton(cerrar);
         pack();
         setLocationRelativeTo(padre);
+    }
+
+    private void guardarPdf(Factura factura) {
+        JFileChooser selector = new JFileChooser();
+        selector.setDialogTitle("Guardar factura como PDF");
+        selector.setFileFilter(new FileNameExtensionFilter("Archivo PDF (*.pdf)", "pdf"));
+        selector.setSelectedFile(new File("factura-" + factura.getCodFactura() + ".pdf"));
+        if (selector.showSaveDialog(this) != JFileChooser.APPROVE_OPTION) return;
+
+        File archivo = selector.getSelectedFile();
+        if (!archivo.getName().toLowerCase(java.util.Locale.ROOT).endsWith(".pdf")) {
+            archivo = new File(archivo.getParentFile(), archivo.getName() + ".pdf");
+        }
+        if (archivo.exists() && JOptionPane.showConfirmDialog(this,
+                "El archivo ya existe. ¿Deseas reemplazarlo?", "Confirmar reemplazo",
+                JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) != JOptionPane.YES_OPTION) return;
+
+        try {
+            Files.write(archivo.toPath(), GeneradorPdfFactura.generar(factura));
+            JOptionPane.showMessageDialog(this, "Factura guardada en:\n" + archivo.getAbsolutePath(),
+                    "PDF guardado", JOptionPane.INFORMATION_MESSAGE);
+        } catch (IOException | IllegalArgumentException ex) {
+            JOptionPane.showMessageDialog(this, "No se pudo guardar el PDF: " + ex.getMessage(),
+                    "Error al guardar", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     private static JPanel totales(Factura f) {

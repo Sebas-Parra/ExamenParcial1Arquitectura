@@ -18,6 +18,11 @@
             <artifactId>gson</artifactId>
             <version>2.14.0</version>
         </dependency>
+        <dependency>
+            <groupId>org.apache.pdfbox</groupId>
+            <artifactId>pdfbox</artifactId>
+            <version>3.0.8</version>
+        </dependency>
     </dependencies>
     <build>
         <finalName>CLI_ESC_COM_CEL_JAVA_REST</finalName>
