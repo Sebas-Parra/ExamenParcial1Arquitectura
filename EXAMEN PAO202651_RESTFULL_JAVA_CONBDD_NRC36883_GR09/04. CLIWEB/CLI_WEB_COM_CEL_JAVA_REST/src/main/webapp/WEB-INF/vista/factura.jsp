@@ -6,12 +6,15 @@ String titulo = f == null ? "Factura" : "Factura N.º " + f.getCodFactura();
 String subtitulo = f == null ? "" : "Cliente: " + f.getNombre() + " · Cédula: " + f.getCedula()
     + " · " + VistaHtml.formaPago(f.getFormaPago());
 %><%@ include file="encabezado.jspf" %>
-<p><a class="link" href="<%=ctx%>/facturas">&larr; Volver a facturas</a></p>
+<p class="solo-pantalla"><a class="link" href="<%=ctx%>/facturas">&larr; Volver a facturas</a></p>
 <% if (f != null) { %>
 <section class="panel">
   <div class="barra">
     <h2>Detalle</h2>
-    <span class="muted">Fecha: <%=VistaHtml.fecha(f.getFecha())%></span>
+    <div class="factura-acciones">
+      <span class="muted">Fecha: <%=VistaHtml.fecha(f.getFecha())%></span>
+      <button type="button" class="secondary solo-pantalla" onclick="window.print()">Guardar como PDF</button>
+    </div>
   </div>
   <div class="tabla-contenedor">
     <table>
@@ -37,7 +40,7 @@ String subtitulo = f == null ? "" : "Cliente: " + f.getNombre() + " · Cédula: 
   </dl>
 </section>
 <% if (f.getCodCredito() != null) { %>
-<section class="panel">
+<section class="panel solo-pantalla">
   <h2>Tabla de amortización · Crédito BanQuito N.º <%=f.getCodCredito()%></h2>
   <p class="muted"><%=f.getNumeroCuotas()%> cuotas mensuales de <%=dinero(f.getValorCuota())%> · tasa 16.5% anual</p>
   <% if (tabla != null) { %><%@ include file="tabla-amortizacion.jspf" %><% } %>
